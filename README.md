@@ -110,6 +110,16 @@ Upon successful deployment, Terraform provides the following critical connection
     ```bash
     terraform apply -auto-approve
     ```
+4. **Get EKS Cluster Details**:
+    ```bash
+    terraform output cluster_name
+    terraform output endpoint
+    ```
+5. **Get Public IPs for your EC2 instances**:
+    ```bash
+    terraform output public_1_ip
+    terraform output public_2_ip
+    ```
 
 ---
 
