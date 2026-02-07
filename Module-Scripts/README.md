@@ -29,8 +29,8 @@ All commands must be executed from the **Root Directory**. Terraform automatical
 ├── main.tf                 # Root orchestrator calling child modules
 ├── variables.tf            # Root variable definitions
 ├── terraform.tfvars        # Deployment values (IPs, Regions, Instance types)
-├── providers.tf            # AWS Provider settings (v~> 6.0) [cite: 4]
-├── s3.tf                   # Creates the remote state bucket [cite: 6]
+├── providers.tf            # AWS Provider settings (v~> 6.0)
+├── s3.tf                   # Creates the remote state bucket
 ├── backend.tf              # Remote state configuration (S3) 
 └── modules/
     ├── vpc/                # Networking (Subnets, IGW, NAT)
