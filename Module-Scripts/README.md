@@ -41,7 +41,7 @@ All commands must be executed from the **Root Directory**. Terraform automatical
 
 ## 🏗 Infrastructure Overview
 
-### 3. Networking (VPC)
+### 1. Networking (VPC)
 
 The foundation consists of a custom VPC designed with a "Public-Private" isolation strategy across three Availability Zones (AZs) for high availability.
 
