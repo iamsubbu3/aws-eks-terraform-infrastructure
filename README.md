@@ -77,6 +77,8 @@ To ensure team collaboration and state persistence, the project uses a remote ba
 * **S3 Bucket**: Dedicated bucket for `terraform.tfstate` storage with versioning enabled for disaster recovery.
 * **Backend Block**: Configured in `providers.tf` to point to the S3 bucket with encryption enabled.
 
+---
+
 ## 📊 Deployment Outputs
 
 Upon successful deployment, Terraform provides the following critical connection data:
@@ -87,6 +89,8 @@ Upon successful deployment, Terraform provides the following critical connection
 4. **CA Data**: Certification authority data required for secure `kubectl` communication.
 5. **OIDC Issuer URL**: The identity bridge URL for IRSA configuration.
 
+---
+
 ## 🚀 How to Deploy
 
 1. **Initialize**: `terraform init` (Downloads providers and sets up the S3 backend).
@@ -94,11 +98,28 @@ Upon successful deployment, Terraform provides the following critical connection
 3. **Plan**: `terraform plan` (Reviews infrastructure changes).
 4. **Apply**: `terraform apply -auto-approve` (Provision the infrastructure).
 
+1.  **Initialize**: 
+    ```bash
+    terraform init
+    ```
+2.  **Plan**: 
+    ```bash
+    terraform plan
+    ```
+3.  **Apply**: 
+    ```bash
+    terraform apply -auto-approve
+    ```
+
+---
+
 ## 🔐 Post-Deployment: Connect to Cluster
 
 To connect your local `kubectl` to the new cluster, run:
+
 ```bash
 aws eks update-kubeconfig --region us-east-1 --name subbu-cluster
+
 ---
 
 *Note: This architecture is designed for a DevOps fresher portfolio, demonstrating expertise in Cloud Networking, Managed Kubernetes, and Infrastructure as Code (IaC).*
