@@ -13,14 +13,6 @@ Jenkins.
 
 ------------------------------------------------------------------------
 
-## Architecture Diagram
-
-*Add your diagram image at `docs/architecture-diagram.png`*
-
-![Architecture](docs/architecture-diagram.png)
-
-------------------------------------------------------------------------
-
 ## Why This Architecture?
 
 -   Multi-AZ high availability (3 public + 3 private subnets)
