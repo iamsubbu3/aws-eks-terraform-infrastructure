@@ -67,24 +67,21 @@ variable "eks_jump_server" {
 }
 
 ################################################################################
-# 4. COMPUTE (EC2 PUBLIC INSTANCES)
+# 4. COMPUTE (MULTI PUBLIC INSTANCES - FOR_EACH)
 ################################################################################
 
-# --- Instance 1 (Jenkins/Ansible) ---
-variable "public_instance_name_1"        { type = string }
-variable "public_instance_ami_1"         { type = string }
-variable "public_instance_type_1"        { type = string }
-variable "public_instance_key_pair_1"    { type = string }
-variable "public_instance_volume_size_1" { type = number }
-variable "public_instance_volume_type_1" { type = string }
+variable "public_instances" {
+  description = "List of public EC2 instances configuration."
 
-# --- Instance 2 ---
-variable "public_instance_name_2"        { type = string }
-variable "public_instance_ami_2"         { type = string }
-variable "public_instance_type_2"        { type = string }
-variable "public_instance_key_pair_2"    { type = string }
-variable "public_instance_volume_size_2" { type = number }
-variable "public_instance_volume_type_2" { type = string }
+  type = list(object({
+    name          = string
+    ami           = string
+    instance_type = string
+    key_name      = string
+    volume_size   = number
+    volume_type   = string
+  }))
+}
 
 ################################################################################
 # 5. EKS CLUSTER SETTINGS
@@ -100,10 +97,14 @@ variable "eks_cluster_role_name" {
   type        = string
 }
 
-# --- Managed Node Group Settings ---
-variable "node_group_name"             { type = string }
-variable "eks_node_group_role_name"    { type = string }
-variable "node_instance_type"          { type = string }
+variable "node_group_name"          { type = string }
+variable "eks_node_group_role_name" { type = string }
+
+variable "node_instance_types" {
+  description = "List of instance types for the EKS node group."
+  type        = list(string)
+}
+
 variable "node_instance_capacity_type" { type = string }
 variable "node_disk_size"              { type = number }
 

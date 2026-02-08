@@ -1,6 +1,5 @@
 ################################################################################
 # 1. INFRASTRUCTURE CONTEXT
-# These variables link the security group to your existing networking.
 ################################################################################
 
 variable "vpc_id" {
@@ -15,15 +14,24 @@ variable "sg_name" {
 
 ################################################################################
 # 2. ACCESS CONTROL SETTINGS
-# Defines which IP addresses are allowed through the firewall.
 ################################################################################
 
 variable "my_ip" {
-  description = "The local IP address (in CIDR notation) for SSH administrative access."
+  description = "Your local IP address (CIDR format) for SSH access."
   type        = string
+
+  validation {
+    condition     = can(cidrnetmask(var.my_ip))
+    error_message = "my_ip must be a valid CIDR block (example: 49.xxx.xxx.xxx/32)."
+  }
 }
 
 variable "eks_jump_server" {
-  description = "The allowed CIDR block for EKS API and management access."
+  description = "CIDR block allowed to access EKS API."
   type        = string
+
+  validation {
+    condition     = can(cidrnetmask(var.eks_jump_server))
+    error_message = "eks_jump_server must be a valid CIDR block."
+  }
 }

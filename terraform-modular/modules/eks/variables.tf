@@ -1,6 +1,5 @@
 ################################################################################
 # 1. CLUSTER CONFIGURATION (CONTROL PLANE)
-# Primary settings for the EKS Cluster and its IAM role.
 ################################################################################
 
 variable "cluster_name" {
@@ -20,7 +19,6 @@ variable "all_subnet_ids" {
 
 ################################################################################
 # 2. NODE GROUP SETTINGS (DATA PLANE)
-# Hardware and scaling configurations for the worker nodes.
 ################################################################################
 
 variable "node_group_name" {
@@ -43,6 +41,11 @@ variable "private_subnets" {
 variable "capacity_type" {
   description = "Type of capacity for the node group (ON_DEMAND or SPOT)."
   type        = string
+
+  validation {
+    condition     = contains(["ON_DEMAND", "SPOT"], var.capacity_type)
+    error_message = "capacity_type must be ON_DEMAND or SPOT."
+  }
 }
 
 variable "instance_types" {

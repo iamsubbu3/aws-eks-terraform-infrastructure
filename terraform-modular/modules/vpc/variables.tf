@@ -1,6 +1,5 @@
 ################################################################################
 # 1. VPC CONFIGURATION
-# Core settings for the Virtual Private Cloud.
 ################################################################################
 
 variable "vpc_name" {
@@ -11,6 +10,11 @@ variable "vpc_name" {
 variable "vpc_cidr_block" {
   description = "The IPv4 CIDR block for the VPC."
   type        = string
+
+  validation {
+    condition     = can(cidrnetmask(var.vpc_cidr_block))
+    error_message = "vpc_cidr_block must be valid CIDR (example: 10.0.0.0/16)."
+  }
 }
 
 variable "instance_tenancy" {
@@ -21,20 +25,29 @@ variable "instance_tenancy" {
 
 ################################################################################
 # 2. NETWORK TOPOLOGY
-# Defines how the network is split across Availability Zones.
 ################################################################################
 
 variable "azs" {
-  description = "A list of Availability Zones names in the region."
+  description = "A list of Availability Zones."
   type        = list(string)
 }
 
 variable "public_subnets" {
   description = "A list of public subnet CIDRs."
   type        = list(string)
+
+  validation {
+    condition     = length(var.public_subnets) == length(var.azs)
+    error_message = "Number of public subnets must match number of AZs."
+  }
 }
 
 variable "private_subnets" {
   description = "A list of private subnet CIDRs."
   type        = list(string)
+
+  validation {
+    condition     = length(var.private_subnets) == length(var.azs)
+    error_message = "Number of private subnets must match number of AZs."
+  }
 }

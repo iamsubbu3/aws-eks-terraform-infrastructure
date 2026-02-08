@@ -34,21 +34,27 @@ my_ip           = "49.206.131.83/32"
 eks_jump_server = "0.0.0.0/0"
 
 ################################################################################
-# 4. EC2 PUBLIC INSTANCES
+# 4. EC2 PUBLIC INSTANCES (MULTI INSTANCE)
 ################################################################################
-public_instance_ami_1         = "ami-0ecb62995f68bb549"
-public_instance_type_1        = "t3.large"
-public_instance_key_pair_1    = "iamsubbu-keypair"
-public_instance_volume_size_1 = 50
-public_instance_volume_type_1 = "gp3"
-public_instance_name_1        = "terraform-public-instance-1"
 
-public_instance_ami_2         = "ami-0ecb62995f68bb549"
-public_instance_type_2        = "t3.medium"
-public_instance_key_pair_2    = "iamsubbu-keypair"
-public_instance_volume_size_2 = 50
-public_instance_volume_type_2 = "gp3"
-public_instance_name_2        = "terraform-public-instance-2"
+public_instances = [
+  {
+    name          = "terraform-public-instance-1"
+    ami           = "ami-0ecb62995f68bb549"
+    instance_type = "t3.large"
+    key_name      = "iamsubbu-keypair"
+    volume_size   = 50
+    volume_type   = "gp3"
+  },
+  {
+    name          = "terraform-public-instance-2"
+    ami           = "ami-0ecb62995f68bb549"
+    instance_type = "t3.medium"
+    key_name      = "iamsubbu-keypair"
+    volume_size   = 50
+    volume_type   = "gp3"
+  }
+]
 
 ################################################################################
 # 5. EKS CLUSTER SETTINGS
@@ -57,8 +63,11 @@ eks_cluster_name            = "subbu-cluster"
 eks_cluster_role_name       = "eks-cluster-role"
 eks_node_group_role_name    = "eks-node-group-role"
 node_group_name             = "SPOT-node-group"
-node_instance_capacity_type  = "SPOT"
-node_instance_type          = "t3.large"
+
+node_instance_capacity_type = "SPOT"
+
+node_instance_types         = ["t3.large", "t3a.large", "t3.medium"]
+
 node_desired_size           = 2
 node_max_size               = 3
 node_min_size               = 1
@@ -67,7 +76,6 @@ node_disk_size              = 50
 ################################################################################
 # 6. S3 BACKEND / STATE STORAGE
 ################################################################################
-
 tfstate_backup_s3_bucket_name      = "terraform-subbu-tf-test-bucket"
 tfstate_backup_s3_tag_name         = "terraform-subbu-tf-test-bucket"
 tfstate_backup_s3_environment_name = "Dev"
