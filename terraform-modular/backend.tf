@@ -9,7 +9,7 @@
 #     key     = "Dev/terraform.tfstate"
 #     region  = "us-east-1"
 #     encrypt = true
-    
+
 #     # Best Practice: Add a DynamoDB table for State Locking
 #     # dynamodb_table = "terraform-lock-table"
 #   }

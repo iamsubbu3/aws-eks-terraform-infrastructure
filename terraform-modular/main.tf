@@ -6,7 +6,7 @@ module "vpc" {
   vpc_name         = var.vpc_name
   vpc_cidr_block   = var.vpc_cidr_block
   instance_tenancy = var.instance_tenancy
-  
+
   azs             = [var.public_subnet_1_avail_zone, var.public_subnet_2_avail_zone, var.public_subnet_3_avail_zone]
   public_subnets  = [var.public_subnet_1_cidr_block, var.public_subnet_2_cidr_block, var.public_subnet_3_cidr_block]
   private_subnets = [var.private_subnet_1_cidr_block, var.private_subnet_2_cidr_block, var.private_subnet_3_cidr_block]
@@ -32,7 +32,7 @@ module "compute" {
   vpc_security_group_ids = [module.security.sg_id]
   public_subnet_ids      = module.vpc.public_subnet_ids
 
-  public_instances       = var.public_instances
+  public_instances = var.public_instances
 }
 
 ################################################################################
@@ -44,14 +44,14 @@ module "eks" {
   cluster_role    = var.eks_cluster_role_name
   node_role       = var.eks_node_group_role_name
   node_group_name = var.node_group_name
-  
+
   all_subnet_ids  = concat(module.vpc.public_subnet_ids, module.vpc.private_subnet_ids)
   private_subnets = module.vpc.private_subnet_ids
 
-  instance_types  = var.node_instance_types
-  capacity_type   = var.node_instance_capacity_type
-  desired_size    = var.node_desired_size
-  max_size        = var.node_max_size
-  min_size        = var.node_min_size
-  disk_size       = var.node_disk_size
+  instance_types = var.node_instance_types
+  capacity_type  = var.node_instance_capacity_type
+  desired_size   = var.node_desired_size
+  max_size       = var.node_max_size
+  min_size       = var.node_min_size
+  disk_size      = var.node_disk_size
 }

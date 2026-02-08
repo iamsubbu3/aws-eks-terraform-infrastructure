@@ -97,7 +97,7 @@ variable "eks_cluster_role_name" {
   type        = string
 }
 
-variable "node_group_name"          { type = string }
+variable "node_group_name" { type = string }
 variable "eks_node_group_role_name" { type = string }
 
 variable "node_instance_types" {
@@ -106,11 +106,11 @@ variable "node_instance_types" {
 }
 
 variable "node_instance_capacity_type" { type = string }
-variable "node_disk_size"              { type = number }
+variable "node_disk_size" { type = number }
 
 variable "node_desired_size" { type = number }
-variable "node_max_size"     { type = number }
-variable "node_min_size"     { type = number }
+variable "node_max_size" { type = number }
+variable "node_min_size" { type = number }
 
 ################################################################################
 # 6. S3 BACKEND / STATE STORAGE

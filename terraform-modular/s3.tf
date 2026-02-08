@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "s3" {
   bucket = var.tfstate_backup_s3_bucket_name
 
   # Allows the bucket to be deleted even if it contains state files (careful!)
-  force_destroy = true 
+  force_destroy = true
 
   tags = {
     Name        = var.tfstate_backup_s3_tag_name

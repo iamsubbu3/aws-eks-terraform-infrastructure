@@ -59,19 +59,19 @@ public_instances = [
 ################################################################################
 # 5. EKS CLUSTER SETTINGS
 ################################################################################
-eks_cluster_name            = "subbu-cluster"
-eks_cluster_role_name       = "eks-cluster-role"
-eks_node_group_role_name    = "eks-node-group-role"
-node_group_name             = "SPOT-node-group"
+eks_cluster_name         = "subbu-cluster"
+eks_cluster_role_name    = "eks-cluster-role"
+eks_node_group_role_name = "eks-node-group-role"
+node_group_name          = "SPOT-node-group"
 
 node_instance_capacity_type = "SPOT"
 
-node_instance_types         = ["t3.large", "t3a.large", "t3.medium"]
+node_instance_types = ["t3.large", "t3a.large", "t3.medium"]
 
-node_desired_size           = 2
-node_max_size               = 3
-node_min_size               = 1
-node_disk_size              = 50
+node_desired_size = 2
+node_max_size     = 3
+node_min_size     = 1
+node_disk_size    = 50
 
 ################################################################################
 # 6. S3 BACKEND / STATE STORAGE
