@@ -36,3 +36,12 @@ output "cluster_arn" {
   description = "ARN of the EKS Cluster."
   value       = aws_eks_cluster.main.arn
 }
+
+################################################################################
+# 3. OIDC PROVIDER (REQUIRED FOR ALB CONTROLLER)
+################################################################################
+
+output "oidc_provider_arn" {
+  description = "OIDC Provider ARN for IRSA roles (ALB Controller etc)"
+  value       = aws_iam_openid_connect_provider.oidc.arn
+}

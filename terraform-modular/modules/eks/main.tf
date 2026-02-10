@@ -34,8 +34,9 @@ resource "aws_eks_cluster" "main" {
     endpoint_private_access = true
     endpoint_public_access  = true
     public_access_cidrs     = [var.my_ip]
-    
-    security_group_ids      = [var.node_security_group_id]
+
+    # Attach your shared SG so nodes and control plane communicate
+    security_group_ids = [var.node_security_group_id]
   }
 
   depends_on = [
@@ -125,4 +126,21 @@ resource "aws_eks_addon" "kube_proxy" {
   cluster_name = aws_eks_cluster.main.name
   addon_name   = "kube-proxy"
   depends_on   = [aws_eks_node_group.main]
+}
+
+################################################################################
+# 6. OIDC PROVIDER (REQUIRED FOR IRSA / ALB CONTROLLER)
+################################################################################
+
+data "tls_certificate" "oidc" {
+  url = aws_eks_cluster.main.identity[0].oidc[0].issuer
+}
+
+resource "aws_iam_openid_connect_provider" "oidc" {
+
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = [data.tls_certificate.oidc.certificates[0].sha1_fingerprint]
+  url             = aws_eks_cluster.main.identity[0].oidc[0].issuer
+
+  depends_on = [aws_eks_cluster.main]
 }

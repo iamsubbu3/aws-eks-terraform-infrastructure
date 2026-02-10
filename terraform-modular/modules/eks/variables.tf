@@ -1,5 +1,5 @@
 ################################################################################
-# 1. EKS CLUSTER CONFIGURATION (CONTROL PLANE)
+# 1. EKS CLUSTER (CONTROL PLANE)
 ################################################################################
 
 variable "cluster_name" {
@@ -13,23 +13,22 @@ variable "cluster_role" {
 }
 
 variable "all_subnet_ids" {
-  description = "List of all subnet IDs (public + private) used by the cluster."
+  description = "All subnet IDs (public + private) used by the cluster."
   type        = list(string)
 }
 
 variable "node_security_group_id" {
-  description = "Security Group attached to EKS control plane endpoint"
+  description = "Security Group attached to EKS control plane."
   type        = string
 }
 
-# ADD THIS BLOCK HERE
 variable "my_ip" {
-  description = "CIDR allowed to access EKS API."
+  description = "CIDR allowed to access EKS public API."
   type        = string
 }
 
 ################################################################################
-# 2. NODE GROUP CONFIGURATION (DATA PLANE)
+# 2. NODE GROUP (DATA PLANE)
 ################################################################################
 
 variable "node_group_name" {
@@ -57,12 +56,12 @@ variable "capacity_type" {
 }
 
 variable "instance_types" {
-  description = "List of EC2 instance types used by the node group."
+  description = "Instance types for node group."
   type        = list(string)
 }
 
 variable "disk_size" {
-  description = "Root disk size (GiB) for worker nodes."
+  description = "Root disk size (GiB)."
   type        = number
 }
 
@@ -71,16 +70,16 @@ variable "disk_size" {
 ################################################################################
 
 variable "desired_size" {
-  description = "Desired number of worker nodes."
+  description = "Desired node count."
   type        = number
 }
 
 variable "max_size" {
-  description = "Maximum number of worker nodes."
+  description = "Maximum node count."
   type        = number
 }
 
 variable "min_size" {
-  description = "Minimum number of worker nodes."
+  description = "Minimum node count."
   type        = number
 }

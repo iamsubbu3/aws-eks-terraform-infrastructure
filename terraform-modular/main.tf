@@ -41,7 +41,7 @@ module "security" {
 }
 
 ################################################################################
-# 3. COMPUTE
+# 3. COMPUTE (PUBLIC INSTANCES / BASTION / JUMP SERVER)
 ################################################################################
 
 module "compute" {
@@ -76,10 +76,9 @@ module "eks" {
   # Networking
   all_subnet_ids  = concat(module.vpc.public_subnet_ids, module.vpc.private_subnet_ids)
   private_subnets = module.vpc.private_subnet_ids
-
   node_security_group_id = module.security.sg_id
 
-  # Node Config
+  # Node Configuration
   instance_types = var.node_instance_types
   capacity_type  = var.node_instance_capacity_type
   desired_size   = var.node_desired_size
@@ -92,3 +91,19 @@ module "eks" {
     module.security
   ]
 }
+
+################################################################################
+# 5. AWS LOAD BALANCER CONTROLLER (ALB)
+################################################################################
+
+module "alb_controller" {
+  source = "./modules/alb-controller"
+
+  cluster_name       = module.eks.cluster_name
+  region             = var.aws_region
+  vpc_id             = module.vpc.vpc_id
+  oidc_provider_arn  = module.eks.oidc_provider_arn
+  oidc_provider_url  = module.eks.cluster_oidc_issuer_url
+}
+
+
