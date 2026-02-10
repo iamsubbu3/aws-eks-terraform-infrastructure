@@ -1,6 +1,5 @@
 ################################################################################
 # 1. CLUSTER CONNECTION DETAILS
-# Use these to configure your local kubectl and connect to the cluster.
 ################################################################################
 
 output "cluster_name" {
@@ -8,14 +7,14 @@ output "cluster_name" {
   value       = module.eks.cluster_name
 }
 
-output "endpoint" {
+output "cluster_endpoint" {
   description = "The endpoint for your EKS Kubernetes API."
-  value       = module.eks.endpoint
+  value       = module.eks.cluster_endpoint
 }
 
 output "cluster_certificate_authority_data" {
-  description = "Base64 encoded certificate data required to communicate with the cluster."
-  value       = module.eks.certificate_authority_data
+  description = "Base64 encoded certificate data."
+  value       = module.eks.cluster_certificate_authority_data
 }
 
 ################################################################################
@@ -23,7 +22,7 @@ output "cluster_certificate_authority_data" {
 ################################################################################
 
 output "region" {
-  description = "The AWS region where the cluster is deployed."
+  description = "AWS region"
   value       = var.aws_region
 }
 
@@ -32,6 +31,20 @@ output "region" {
 ################################################################################
 
 output "cluster_oidc_issuer_url" {
-  description = "The URL on the EKS cluster for the OpenID Connect identity provider."
-  value       = module.eks.oidc_issuer
+  description = "OIDC Issuer URL"
+  value       = module.eks.cluster_oidc_issuer_url
+}
+
+################################################################################
+# 4. MANAGEMENT INSTANCE ACCESS
+################################################################################
+
+output "public_instance_ips" {
+  description = "Public IPs of EC2 instances"
+  value       = module.compute.public_ips
+}
+
+output "public_instance_dns" {
+  description = "Public DNS of EC2 instances"
+  value       = module.compute.public_dns
 }

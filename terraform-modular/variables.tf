@@ -1,33 +1,33 @@
 ################################################################################
-# 1. PROVIDER & GLOBAL SETTINGS
+# 1. GLOBAL SETTINGS
 ################################################################################
 
 variable "aws_region" {
-  description = "The AWS region where resources will be deployed."
+  description = "AWS region where resources will be deployed."
   type        = string
 }
 
 ################################################################################
-# 2. VPC & CORE NETWORKING
+# 2. VPC & NETWORKING
 ################################################################################
 
 variable "vpc_name" {
-  description = "The name tag for the VPC."
+  description = "Name tag for the VPC."
   type        = string
 }
 
 variable "vpc_cidr_block" {
-  description = "The CIDR block for the VPC."
+  description = "CIDR block for the VPC."
   type        = string
 }
 
 variable "instance_tenancy" {
-  description = "The tenancy of the instances launched into the VPC."
+  description = "Instance tenancy for the VPC."
   type        = string
   default     = "default"
 }
 
-# --- Public Subnet Layer ---
+# Public Subnets
 variable "public_subnet_1_cidr_block" { type = string }
 variable "public_subnet_1_avail_zone" { type = string }
 
@@ -37,7 +37,7 @@ variable "public_subnet_2_avail_zone" { type = string }
 variable "public_subnet_3_cidr_block" { type = string }
 variable "public_subnet_3_avail_zone" { type = string }
 
-# --- Private Subnet Layer ---
+# Private Subnets (EKS Worker Nodes)
 variable "private_subnet_1_cidr_block" { type = string }
 variable "private_subnet_1_avail_zone" { type = string }
 
@@ -48,30 +48,30 @@ variable "private_subnet_3_cidr_block" { type = string }
 variable "private_subnet_3_avail_zone" { type = string }
 
 ################################################################################
-# 3. SECURITY & ACCESS CONTROL
+# 3. SECURITY
 ################################################################################
 
 variable "sg_name" {
-  description = "The name of the security group."
+  description = "Security Group name."
   type        = string
 }
 
 variable "my_ip" {
-  description = "Your local IP address for SSH access."
+  description = "Your public IP in CIDR format."
   type        = string
 }
 
 variable "eks_jump_server" {
-  description = "The IP address or CIDR allowed to access EKS API."
+  description = "CIDR allowed for EKS API access."
   type        = string
 }
 
 ################################################################################
-# 4. COMPUTE (MULTI PUBLIC INSTANCES - FOR_EACH)
+# 4. COMPUTE (PUBLIC EC2 INSTANCES)
 ################################################################################
 
 variable "public_instances" {
-  description = "List of public EC2 instances configuration."
+  description = "List of public EC2 instance configurations."
 
   type = list(object({
     name          = string
@@ -84,49 +84,74 @@ variable "public_instances" {
 }
 
 ################################################################################
-# 5. EKS CLUSTER SETTINGS
+# 5. EKS SETTINGS
 ################################################################################
 
 variable "eks_cluster_name" {
-  description = "The name of the EKS cluster."
+  description = "EKS Cluster name."
   type        = string
 }
 
 variable "eks_cluster_role_name" {
-  description = "The IAM role name for the EKS cluster."
+  description = "IAM Role name for EKS Control Plane."
   type        = string
 }
 
-variable "node_group_name" { type = string }
-variable "eks_node_group_role_name" { type = string }
+variable "node_group_name" {
+  description = "EKS Node Group name."
+  type        = string
+}
+
+variable "eks_node_group_role_name" {
+  description = "IAM Role name for EKS Worker Nodes."
+  type        = string
+}
 
 variable "node_instance_types" {
-  description = "List of instance types for the EKS node group."
+  description = "Instance types used by EKS nodes."
   type        = list(string)
 }
 
-variable "node_instance_capacity_type" { type = string }
-variable "node_disk_size" { type = number }
+variable "node_instance_capacity_type" {
+  description = "Node capacity type (ON_DEMAND or SPOT)."
+  type        = string
+}
 
-variable "node_desired_size" { type = number }
-variable "node_max_size" { type = number }
-variable "node_min_size" { type = number }
+variable "node_disk_size" {
+  description = "Root disk size for EKS nodes."
+  type        = number
+}
+
+variable "node_desired_size" {
+  description = "Desired node count."
+  type        = number
+}
+
+variable "node_max_size" {
+  description = "Maximum node count."
+  type        = number
+}
+
+variable "node_min_size" {
+  description = "Minimum node count."
+  type        = number
+}
 
 ################################################################################
-# 6. S3 BACKEND / STATE STORAGE
+# 6. S3 STATE STORAGE
 ################################################################################
 
 variable "tfstate_backup_s3_bucket_name" {
-  description = "The globally unique name for the S3 bucket."
+  description = "S3 bucket name for Terraform state."
   type        = string
 }
 
 variable "tfstate_backup_s3_tag_name" {
-  description = "The Name tag for the S3 bucket."
+  description = "Name tag for S3 bucket."
   type        = string
 }
 
 variable "tfstate_backup_s3_environment_name" {
-  description = "The environment tag (e.g., Dev, Prod) for the bucket."
+  description = "Environment tag (Dev/Prod)."
   type        = string
 }

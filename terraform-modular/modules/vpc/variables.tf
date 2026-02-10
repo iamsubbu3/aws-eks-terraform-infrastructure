@@ -28,12 +28,17 @@ variable "instance_tenancy" {
 ################################################################################
 
 variable "azs" {
-  description = "A list of Availability Zones."
+  description = "List of Availability Zones."
   type        = list(string)
+
+  validation {
+    condition     = length(var.azs) >= 2
+    error_message = "Provide at least two AZs for high availability."
+  }
 }
 
 variable "public_subnets" {
-  description = "A list of public subnet CIDRs."
+  description = "List of public subnet CIDRs."
   type        = list(string)
 
   validation {
@@ -43,7 +48,7 @@ variable "public_subnets" {
 }
 
 variable "private_subnets" {
-  description = "A list of private subnet CIDRs."
+  description = "List of private subnet CIDRs."
   type        = list(string)
 
   validation {

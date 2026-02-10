@@ -18,7 +18,7 @@ public_subnet_2_avail_zone = "us-east-1b"
 public_subnet_3_cidr_block = "10.0.3.0/24"
 public_subnet_3_avail_zone = "us-east-1c"
 
-# Private Subnets
+# Private Subnets (EKS Worker Nodes)
 private_subnet_1_cidr_block = "10.0.4.0/24"
 private_subnet_1_avail_zone = "us-east-1a"
 private_subnet_2_cidr_block = "10.0.5.0/24"
@@ -29,9 +29,13 @@ private_subnet_3_avail_zone = "us-east-1c"
 ################################################################################
 # 3. SECURITY GROUPS
 ################################################################################
-sg_name         = "terraform-sg"
-my_ip           = "49.206.131.83/32"
-eks_jump_server = "0.0.0.0/0"
+sg_name = "terraform-sg"
+
+# Your Laptop Public IP
+my_ip = "49.206.131.83/32"
+
+# Restrict EKS API to your IP
+eks_jump_server = "49.206.131.83/32"
 
 ################################################################################
 # 4. EC2 PUBLIC INSTANCES (MULTI INSTANCE)
@@ -49,7 +53,15 @@ public_instances = [
   {
     name          = "terraform-public-instance-2"
     ami           = "ami-0ecb62995f68bb549"
-    instance_type = "t3.medium"
+    instance_type = "t3.large"
+    key_name      = "iamsubbu-keypair"
+    volume_size   = 50
+    volume_type   = "gp3"
+  },
+  {
+    name          = "terraform-public-instance-3"
+    ami           = "ami-0ecb62995f68bb549"
+    instance_type = "t3.large"
     key_name      = "iamsubbu-keypair"
     volume_size   = 50
     volume_type   = "gp3"
@@ -62,11 +74,16 @@ public_instances = [
 eks_cluster_name         = "subbu-cluster"
 eks_cluster_role_name    = "eks-cluster-role"
 eks_node_group_role_name = "eks-node-group-role"
-node_group_name          = "SPOT-node-group"
+node_group_name          = "ondemand-node-group"
 
-node_instance_capacity_type = "SPOT"
+node_instance_capacity_type = "ON_DEMAND"
 
-node_instance_types = ["t3.large", "t3a.large", "t3.medium"]
+node_instance_types = [
+  "t3.large",
+  "t3a.large",
+  "t3.medium",
+  "t3a.medium"
+]
 
 node_desired_size = 2
 node_max_size     = 3

@@ -3,12 +3,12 @@
 ################################################################################
 
 variable "vpc_id" {
-  description = "The ID of the VPC where the security group will be created."
+  description = "ID of the VPC where this security group will be created."
   type        = string
 }
 
 variable "sg_name" {
-  description = "The name of the security group."
+  description = "Name of the security group."
   type        = string
 }
 
@@ -17,7 +17,7 @@ variable "sg_name" {
 ################################################################################
 
 variable "my_ip" {
-  description = "Your local IP address (CIDR format) for SSH access."
+  description = "Admin IP in CIDR format for SSH access."
   type        = string
 
   validation {
@@ -27,7 +27,7 @@ variable "my_ip" {
 }
 
 variable "eks_jump_server" {
-  description = "CIDR block allowed to access EKS API."
+  description = "CIDR block allowed to access EKS API endpoint."
   type        = string
 
   validation {

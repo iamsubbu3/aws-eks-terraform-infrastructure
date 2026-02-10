@@ -1,36 +1,36 @@
 ################################################################################
-# CORE NETWORKING OUTPUTS
+# 1. CORE NETWORKING OUTPUTS
 ################################################################################
 
 output "vpc_id" {
-  description = "The ID of the VPC."
+  description = "ID of the created VPC."
   value       = aws_vpc.main.id
 }
 
 ################################################################################
-# SUBNET IDENTIFIERS
+# 2. SUBNET IDENTIFIERS
 ################################################################################
 
 output "public_subnet_ids" {
-  description = "A list of IDs for the public subnets."
+  description = "IDs of all public subnets."
   value       = aws_subnet.public[*].id
 }
 
 output "private_subnet_ids" {
-  description = "A list of IDs for the private subnets."
+  description = "IDs of all private subnets."
   value       = aws_subnet.private[*].id
 }
 
 ################################################################################
-# OPTIONAL (DEBUGGING / VISIBILITY)
+# 3. OPTIONAL DEBUG OUTPUTS
 ################################################################################
 
 output "public_subnet_azs" {
-  description = "AZs used by public subnets."
+  description = "Availability Zones of public subnets."
   value       = aws_subnet.public[*].availability_zone
 }
 
 output "private_subnet_azs" {
-  description = "AZs used by private subnets."
+  description = "Availability Zones of private subnets."
   value       = aws_subnet.private[*].availability_zone
 }

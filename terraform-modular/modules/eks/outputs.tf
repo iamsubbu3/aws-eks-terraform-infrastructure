@@ -8,28 +8,27 @@ output "cluster_name" {
   value       = aws_eks_cluster.main.name
 }
 
-output "endpoint" {
-  description = "The endpoint for the EKS Kubernetes API server."
+output "cluster_endpoint" {
+  description = "Endpoint for the EKS Kubernetes API server."
   value       = aws_eks_cluster.main.endpoint
 }
 
-output "certificate_authority_data" {
-  description = "The base64 encoded certificate data required to communicate with the cluster."
+output "cluster_certificate_authority_data" {
+  description = "Base64 encoded certificate data required to communicate with the cluster."
   value       = aws_eks_cluster.main.certificate_authority[0].data
 }
 
 output "cluster_version" {
-  description = "The Kubernetes version of the EKS cluster."
+  description = "Kubernetes version of the EKS cluster."
   value       = aws_eks_cluster.main.version
 }
 
 ################################################################################
 # 2. IDENTITY & SECURITY
-# Used for IAM Roles for Service Accounts (IRSA) and auditing.
 ################################################################################
 
-output "oidc_issuer" {
-  description = "The URL for the OpenID Connect identity provider of the EKS cluster."
+output "cluster_oidc_issuer_url" {
+  description = "OIDC issuer URL used for IAM Roles for Service Accounts (IRSA)."
   value       = aws_eks_cluster.main.identity[0].oidc[0].issuer
 }
 

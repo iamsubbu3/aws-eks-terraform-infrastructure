@@ -1,11 +1,14 @@
 ################################################################################
 # 1. CORE NETWORKING
-# Defines the VPC and the entry point for the public internet.
 ################################################################################
 
 resource "aws_vpc" "main" {
-  cidr_block       = var.vpc_cidr_block
-  instance_tenancy = var.instance_tenancy
+  cidr_block           = var.vpc_cidr_block
+  instance_tenancy     = var.instance_tenancy
+
+  # VERY IMPORTANT FOR EKS
+  enable_dns_hostnames = true
+  enable_dns_support   = true
 
   tags = {
     Name = var.vpc_name
@@ -21,11 +24,9 @@ resource "aws_internet_gateway" "gw" {
 }
 
 ################################################################################
-# 2. SUBNET LAYERS
-# Public subnets for external-facing resources and private subnets for EKS nodes.
+# 2. PUBLIC SUBNETS
 ################################################################################
 
-# --- Public Subnets ---
 resource "aws_subnet" "public" {
   count                   = length(var.public_subnets)
   vpc_id                  = aws_vpc.main.id
@@ -34,12 +35,16 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name                     = "${var.vpc_name}-public-${count.index + 1}"
-    "kubernetes.io/role/elb" = "1"
+    Name                              = "${var.vpc_name}-public-${count.index + 1}"
+    "kubernetes.io/role/elb"          = "1"
+    "kubernetes.io/cluster/${var.vpc_name}" = "shared"
   }
 }
 
-# --- Private Subnets ---
+################################################################################
+# 3. PRIVATE SUBNETS
+################################################################################
+
 resource "aws_subnet" "private" {
   count             = length(var.private_subnets)
   vpc_id            = aws_vpc.main.id
@@ -47,14 +52,14 @@ resource "aws_subnet" "private" {
   availability_zone = var.azs[count.index]
 
   tags = {
-    Name                              = "${var.vpc_name}-private-${count.index + 1}"
-    "kubernetes.io/role/internal-elb" = "1"
-  }
+    Name                                   = "${var.vpc_name}-private-${count.index + 1}"
+    "kubernetes.io/role/internal-elb"      = "1"
+    "kubernetes.io/cluster/${var.vpc_name}" = "shared"
+  } 
 }
 
 ################################################################################
-# 3. CONNECTIVITY (NAT GATEWAY)
-# Provides internet access for private subnets via the first public subnet.
+# 4. NAT GATEWAY
 ################################################################################
 
 resource "aws_eip" "nat" {
@@ -69,17 +74,17 @@ resource "aws_nat_gateway" "main" {
   allocation_id = aws_eip.nat.id
   subnet_id     = aws_subnet.public[0].id
 
+  depends_on = [aws_internet_gateway.gw]
+
   tags = {
     Name = "${var.vpc_name}-nat-gw"
   }
 }
 
 ################################################################################
-# 4. ROUTING
-# Logic to direct traffic through the Internet Gateway or NAT Gateway.
+# 5. ROUTING
 ################################################################################
 
-# --- Public Route Table & Associations ---
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
@@ -99,7 +104,6 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
-# --- Private Route Table & Associations ---
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 

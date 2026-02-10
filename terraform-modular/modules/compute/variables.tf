@@ -1,14 +1,16 @@
 ################################################################################
 # 1. SHARED SECURITY CONFIGURATION
+# Security groups attached to EC2 instances
 ################################################################################
 
 variable "vpc_security_group_ids" {
-  description = "A list of security group IDs to associate with the instances."
+  description = "List of security group IDs to associate with the instances."
   type        = list(string)
 }
 
 ################################################################################
-# 2. PUBLIC SUBNETS (USED FOR DISTRIBUTION ACROSS AZs)
+# 2. PUBLIC SUBNET DISTRIBUTION
+# Used to automatically spread instances across AZs
 ################################################################################
 
 variable "public_subnet_ids" {
@@ -17,11 +19,21 @@ variable "public_subnet_ids" {
 }
 
 ################################################################################
-# 3. PUBLIC INSTANCES CONFIGURATION (FOR_EACH BASED)
+# 3. OPTIONAL IAM INSTANCE PROFILE (ATTACH ROLE TO SELECT INSTANCES)
+################################################################################
+
+variable "iam_instance_profile_name" {
+  description = "IAM Instance Profile name to attach to specific EC2 instances (optional)."
+  type        = string
+  default     = null
+}
+
+################################################################################
+# 4. PUBLIC INSTANCE DEFINITIONS (FOR_EACH BASED)
 ################################################################################
 
 variable "public_instances" {
-  description = "List of public EC2 instances configuration."
+  description = "Configuration for multiple public EC2 instances."
 
   type = list(object({
     name          = string

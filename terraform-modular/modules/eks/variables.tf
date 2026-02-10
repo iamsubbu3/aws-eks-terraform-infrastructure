@@ -1,76 +1,86 @@
 ################################################################################
-# 1. CLUSTER CONFIGURATION (CONTROL PLANE)
+# 1. EKS CLUSTER CONFIGURATION (CONTROL PLANE)
 ################################################################################
 
 variable "cluster_name" {
-  description = "The name of the EKS cluster."
+  description = "Name of the EKS Cluster."
   type        = string
 }
 
 variable "cluster_role" {
-  description = "The name of the IAM role for the EKS cluster."
+  description = "IAM Role name used by the EKS Control Plane."
   type        = string
 }
 
 variable "all_subnet_ids" {
-  description = "A list of all subnet IDs (public and private) for the cluster VPC config."
+  description = "List of all subnet IDs (public + private) used by the cluster."
   type        = list(string)
 }
 
+variable "node_security_group_id" {
+  description = "Security Group attached to EKS control plane endpoint"
+  type        = string
+}
+
+# ADD THIS BLOCK HERE
+variable "my_ip" {
+  description = "CIDR allowed to access EKS API."
+  type        = string
+}
+
 ################################################################################
-# 2. NODE GROUP SETTINGS (DATA PLANE)
+# 2. NODE GROUP CONFIGURATION (DATA PLANE)
 ################################################################################
 
 variable "node_group_name" {
-  description = "The name of the EKS node group."
+  description = "Name of the EKS Managed Node Group."
   type        = string
 }
 
 variable "node_role" {
-  description = "The name of the IAM role for the node group."
+  description = "IAM Role name assigned to worker nodes."
   type        = string
 }
 
 variable "private_subnets" {
-  description = "A list of private subnet IDs where the nodes will be deployed."
+  description = "Private subnet IDs where worker nodes will be launched."
   type        = list(string)
 }
 
-# --- Instance & Capacity Specs ---
+################################################################################
+# 3. NODE INSTANCE SETTINGS
+################################################################################
 
 variable "capacity_type" {
-  description = "Type of capacity for the node group (ON_DEMAND or SPOT)."
+  description = "Capacity type for nodes (ON_DEMAND or SPOT)."
   type        = string
-
-  validation {
-    condition     = contains(["ON_DEMAND", "SPOT"], var.capacity_type)
-    error_message = "capacity_type must be ON_DEMAND or SPOT."
-  }
 }
 
 variable "instance_types" {
-  description = "A list of instance types associated with the node group."
+  description = "List of EC2 instance types used by the node group."
   type        = list(string)
 }
 
 variable "disk_size" {
-  description = "The disk size (in GiB) for the worker nodes."
+  description = "Root disk size (GiB) for worker nodes."
   type        = number
 }
 
-# --- Scaling Configuration ---
+################################################################################
+# 4. AUTO SCALING CONFIGURATION
+################################################################################
 
 variable "desired_size" {
-  description = "The desired number of worker nodes."
+  description = "Desired number of worker nodes."
   type        = number
 }
 
 variable "max_size" {
-  description = "The maximum number of worker nodes."
+  description = "Maximum number of worker nodes."
   type        = number
 }
 
 variable "min_size" {
-  description = "The minimum number of worker nodes."
+  description = "Minimum number of worker nodes."
   type        = number
 }
